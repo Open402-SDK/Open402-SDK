@@ -1,0 +1,16 @@
+import type { NextApiRequest, NextApiResponse } from "next";
+import { payWithOpen402 } from "../../../src";
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "POST") return res.status(405).json({ error: "Method Not Allowed" });
+
+  const result = await payWithOpen402({
+    endpoint: "/api/private-data",
+    amount: "0.02 USD",
+    facilitator: "mock",
+    memo: "next-api-demo",
+  });
+
+  if (!result.ok) return res.status(400).json(result);
+  return res.status(200).json(result);
+}
